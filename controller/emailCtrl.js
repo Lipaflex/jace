@@ -1,29 +1,28 @@
 const nodemailer = require("nodemailer");
 const asyncHandler = require("express-async-handler");
-const sendEmail = asyncHandler(async (data,req, res) => {
-    let transporter = nodemailer.createTransport({
-    service: 'gmail',
+
+const sendEmail = asyncHandler(async (data, req, res) => {
+  let transporter = nodemailer.createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: false, // true for 465, false for other ports
     auth: {
-      user: process.env.EMAIL_USERNAME,
-      pass: process.env.EMAIL_PASSWORD
+      user: process.env.MAIL_ID,
+      pass: process.env.MP,
     }
-  });
-
-  let mailOptions = {
-    from: data.from,
-    to: data.to,
-    subject: data.subject,
-    html: data.html
-  };
-
-  transporter.sendMail(mailOptions, function(err, info){
-    if(err) {
-      console.log(err)
-      res.json({msg: err})
-    } else {
-      console.log('Email sent: ' + info.response);
-      res.json({msg: 'success'})
-    }
-  });
-    
 });
+
+let info = await transporter.sendMail({
+  from: '"Hey 👻" <jace@gmail.com>', // sender address
+    to: data.to, // list of receivers
+    subject: data.subject, // Subject line
+    text: data.text, // plain text body
+    html: data.html, // html body
+  });
+
+  console.log('Message sent: %s', info.messageId);
+
+  console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+});
+
+module.exports = sendEmail;

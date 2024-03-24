@@ -11,7 +11,10 @@ const validateMongoDbId = require("../utils/validateMongodbId");
 const { generateRefreshToken } = require("../config/refreshtoken");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
-const sendEmail = require("./emailCtrl");
+const nodemailer = require('nodemailer');
+const sendEmail = require('../controller/emailCtrl');
+
+
 
 // Create a User ----------------------------------------------
 
@@ -304,11 +307,12 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
   try {
     const token = await user.createPasswordResetToken();
     await user.save();
-    const resetURL = `Hi, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='http://localhost:5000/api/user/reset-password/${token}'>Click Here</>`;
+    const resetURL = `Hi, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. 
+    <a href='http://localhost:5000/api/user/reset-password/${token}'>Click Here</>`;
     const data = {
       to: email,
       text: "Hey User",
-      subject: "Forgot Password Link",
+      subject: "Forgot Password Link?",
       htm: resetURL,
     };
     sendEmail(data);

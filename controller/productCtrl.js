@@ -5,15 +5,34 @@ const slugify = require("slugify");
 const validateMongoDbId = require("../utils/validateMongodbId");
 
 const createProduct = asyncHandler(async (req, res) => {
+
   try {
-    if (req.body.title) {
-      req.body.slug = slugify(req.body.title);
+
+    const { title } = req.body;
+
+    // slugify title 
+    const slug = slugify(title);
+
+    // check for duplicate
+    const duplicate = await Product.findOne({ slug });
+
+    if (duplicate) {
+      return res.status(409).json({ message: 'Duplicate product title' });
     }
-    const newProduct = await Product.create(req.body);
-    res.json(newProduct);
-  } catch (error) {
-    throw new Error(error);
+
+    const product = await Product.create({
+      title,
+      slug,
+      ...req.body 
+    });
+
+    res.status(201).json(product);
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: err.message });
   }
+
 });
 
 const updateProduct = asyncHandler(async (req, res) => {

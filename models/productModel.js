@@ -1,4 +1,5 @@
 const mongoose = require("mongoose"); // Erase if already required
+const { string } = require("sharp/lib/is");
 
 // Declare the Schema of the Mongo model
 var productSchema = new mongoose.Schema(
@@ -23,29 +24,29 @@ var productSchema = new mongoose.Schema(
       required: true,
     },
     category: {
-      type: String,
+      type: string,
       required: true,
     },
     brand: {
       type: String,
       required: true,
     },
-    quantity: {
-      type: Number,
-      required: true,
+    mobile: {
+      type: String,
+      index: {unique: false}
     },
+    quantity: Number,
     sold: {
       type: Number,
-      default: 0,
+      default: 0
     },
-    images: [
-      {
-        public_id: String,
-        url: String,
-      },
-    ],
-    color: [],
-    tags: String,
+    images: {
+      type: Array,
+    },
+    color: {
+      type: String,
+      required: true,
+    },
     ratings: [
       {
         star: Number,

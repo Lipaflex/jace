@@ -12,7 +12,7 @@ const { generateRefreshToken } = require("../config/refreshtoken");
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
-const sendEmail = require('../controller/emailCtrl');
+const sendEmail = require("../controller/emailCtrl");
 
 
 

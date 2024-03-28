@@ -4,11 +4,11 @@ const asyncHandler = require("express-async-handler");
 const sendEmail = asyncHandler(async (data, req, res) => {
   let transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 456,
-  secure: true, // Use `true` for port 465, `false` for all other ports
+  port: 587,
+  secure: false, // Use `true` for port 465, `false` for all other ports
   auth: {
-    user: "lipaflex01@gmail.com",
-    pass: "hqqj iokk kqvp wuce",
+    user: process.env.EMAIL_ID,
+    pass: process.env.MP,
   },
 });
 

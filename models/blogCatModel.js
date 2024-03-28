@@ -1,5 +1,5 @@
 const mongoose = require("mongoose"); // Erase if already required
-
+mongoose.set('strictQuery', true);
 // Declare the Schema of the Mongo model
 var blogcategorySchema = new mongoose.Schema(
   {

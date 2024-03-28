@@ -13,6 +13,7 @@ const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const nodemailer = require('nodemailer');
 const sendEmail = require("../controller/emailCtrl");
+const { count } = require("console");
 
 
 
@@ -178,7 +179,6 @@ const updatedUser = asyncHandler(async (req, res) => {
 const saveAddress = asyncHandler(async (req, res, next) => {
   const { _id } = req.user;
   validateMongoDbId(_id);
-
   try {
     const updatedUser = await User.findByIdAndUpdate(
       _id,
@@ -348,14 +348,15 @@ const getWishlist = asyncHandler(async (req, res) => {
   }
 });
 
-const userCart = asyncHandler(async (req, res) => {
-  const { cart } = req.body;
+ // User Cart
+
+ const userCart = asyncHandler(async (req, res) => {
+  const {cart} = req.body;
   const { _id } = req.user;
   validateMongoDbId(_id);
   try {
     let products = [];
     const user = await User.findById(_id);
-    // check if user already have product in cart
     const alreadyExistCart = await Cart.findOne({ orderby: user._id });
     if (alreadyExistCart) {
       alreadyExistCart.remove();
@@ -383,6 +384,7 @@ const userCart = asyncHandler(async (req, res) => {
     throw new Error(error);
   }
 });
+
 
 const getUserCart = asyncHandler(async (req, res) => {
   const { _id } = req.user;
@@ -451,12 +453,12 @@ const createOrder = asyncHandler(async (req, res) => {
     let newOrder = await new Order({
       products: userCart.products,
       paymentIntent: {
-        id: uniqueId(),
+        id: uniqid(),
         method: "COD",
         amount: finalAmout,
         status: "Cash on Delivery",
         created: Date.now(),
-        currency: "usd",
+        currency: "Ksh",
       },
       orderby: user._id,
       orderStatus: "Cash on Delivery",
